@@ -1,0 +1,17 @@
+escape ^Tt
+bind ^G
+bind g
+
+startup_message off
+deflogin on
+defscrollback 10000
+vbell off
+autodetach on
+altscreen on
+
+hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
+caption string "%?%F%{.R.}%?%3n %t%? [%h]%?"
+
+attrcolor b ".I"
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+defbce on
