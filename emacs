@@ -13,6 +13,7 @@
 (setq inhibit-startup-screen t)
 (global-font-lock-mode 1)
 (transient-mark-mode 1)
+(setq-default show-trailing-whitespace t)
 
 (setq display-time-24hr-format t)
 (display-time)
