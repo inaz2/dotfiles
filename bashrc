@@ -3,7 +3,7 @@ ulimit -c 0
 shopt -u sourcepath
 
 if [[ "$PS1" ]]; then
-    unset LANG
+    export LANG=C.UTF-8
     unset MAIL
 
     HISTSIZE=100000
