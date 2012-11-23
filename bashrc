@@ -3,12 +3,13 @@ ulimit -c 0
 shopt -u sourcepath
 
 if [[ "$PS1" ]]; then
-    export LANG=C.UTF-8
+    unset LANG
+    unset MAIL
 
     HISTSIZE=100000
     HISTFILESIZE=100000
     HISTCONTROL=ignoreboth
-    unset MAIL
+
     shopt -s histappend
     shopt -s histverify
     shopt -s histreedit
