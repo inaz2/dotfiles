@@ -1,8 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-for i in *; do
-    if [[ "$i" == 'install.sh' || "$i" == 'README' ]]; then
-        continue
-    fi
+shopt -s extglob
+for i in !($0|README); do
     ln -s "$PWD/$i" "$HOME/.$i"
 done
