@@ -1,0 +1,9 @@
+[user]
+        name = inaz2
+        email = inaz2@twitter
+
+[color]
+        ui = auto
+
+[credential]
+        helper = cache
