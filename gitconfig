@@ -2,8 +2,20 @@
         name = inaz2
         email = inaz2@twitter
 
+[alias]
+        st = status
+        co = checkout
+        ci = commit
+        br = branch
+        df = diff
+        lg = log -p
+        tree = log --graph --format='%C(yellow)%h %C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset'
+
 [color]
         ui = auto
+
+[push]
+        default = current
 
 [credential]
         helper = cache
