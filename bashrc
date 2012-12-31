@@ -42,4 +42,6 @@ if [[ "$PS1" ]]; then
     alias ox='od -Ax -tx1z'
     alias emacs='TERM=xterm-256color emacs -nw -rv'
     alias wget='wget --no-check-certificate'
+
+    eval $(dircolors -b)
 fi
