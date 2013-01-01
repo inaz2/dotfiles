@@ -2,7 +2,7 @@ umask 022
 ulimit -c 0
 shopt -u sourcepath
 
-if [[ "$PS1" ]]; then
+if [[ -n "$PS1" ]]; then
     export LANG=C.UTF-8
     unset MAIL
 
@@ -20,7 +20,7 @@ if [[ "$PS1" ]]; then
 
     stty sane erase ^? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
 
-    function prompt_cmd {
+    prompt_cmd() {
         local s=$?
         history -a
         if [[ $s -ne 0 ]]; then
@@ -31,7 +31,14 @@ if [[ "$PS1" ]]; then
         fi
     }
     PROMPT_COMMAND=prompt_cmd
-    PS1="\n\[\e[33m\]\u@\h:\[\e[39m\]\w\n\$ "
+
+    git_branch() {
+        local ref=$(git symbolic-ref HEAD 2>/dev/null)
+        if [[ -n "$ref" ]]; then
+            printf "${1:-%s}" "${ref##*/}"
+        fi
+    }
+    PS1="\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]\$(git_branch '(%s)')\[\e[0m\]\n\$ "
 
     unalias -a
     alias ls='ls -CF --color=auto'
