@@ -40,7 +40,7 @@ if [[ "$PS1" ]]; then
     alias l='less'
     alias grep='LC_CTYPE=C grep --color=auto'
     alias ox='od -Ax -tx1z'
-    alias emacs='TERM=xterm-256color emacs -nw -rv'
+    alias emacs='emacs -nw -rv'
     alias wget='wget --no-check-certificate'
 
     eval $(dircolors -b)

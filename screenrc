@@ -3,6 +3,7 @@ bind ^G
 bind g
 
 startup_message off
+term screen-256color
 deflogin on
 defscrollback 10000
 vbell off

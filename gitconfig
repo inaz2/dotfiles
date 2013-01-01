@@ -10,6 +10,7 @@
         df = diff
         lg = log -p
         tree = log --graph --format='%C(yellow)%h %C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset'
+        on = !git status --porcelain | git commit -a -F -
 
 [color]
         ui = auto
