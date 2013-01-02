@@ -21,16 +21,18 @@ setopt hist_ignore_dups
 setopt hist_ignore_space
 
 setopt print_eight_bit
-setopt extended_glob
-setopt nomatch
 setopt no_beep
-setopt notify
+setopt extended_glob
+setopt magic_equal_subst
+setopt correct
+setopt nomatch
 setopt auto_menu
 setopt list_types
 setopt auto_pushd
 setopt pushd_ignore_dups
-setopt magic_equal_subst
 setopt prompt_subst
+setopt transient_rprompt
+setopt notify
 
 git_branch() {
     local ref=$(git symbolic-ref HEAD 2>/dev/null)
