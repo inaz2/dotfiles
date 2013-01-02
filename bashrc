@@ -23,17 +23,17 @@ if [[ -n "$PS1" ]]; then
     exit_status() {
         local s=$?
         if [[ $s -ne 0 ]]; then
-            echo -e "\e[41mexit $s\e[0m"
+            echo "exit $s"
             echo -n ' '    # workaround to preserve newline in Command Substitution
         fi
     }
-    git_branch() {
-        local ref=$(git symbolic-ref HEAD 2>/dev/null)
-        if [[ -n "$ref" ]]; then
-            printf "${1:-%s}" "${ref##*/}"
+    git_status() {
+        local s="$(git status --short --branch 2>/dev/null)"
+        if [[ -n "$s" ]]; then
+            echo $s    # collapse sequences of whitespace into a single space
         fi
     }
-    PS1=$'$(exit_status)\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]$(git_branch "(%s)")\[\e[0m\]\n\$ '
+    PS1=$'\[\e[41m\]$(exit_status)\[\e[0m\]\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]$(git_status)\[\e[0m\]\n\$ '
 
     __precmd_hook() {
         trap __preexec_hook DEBUG

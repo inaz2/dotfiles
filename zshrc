@@ -20,28 +20,30 @@ setopt extended_history
 setopt hist_ignore_dups
 setopt hist_ignore_space
 
-setopt print_eight_bit
-setopt no_beep
 setopt extended_glob
+setopt auto_menu
+setopt list_types
 setopt magic_equal_subst
 setopt correct
 setopt nomatch
-setopt auto_menu
-setopt list_types
 setopt auto_pushd
 setopt pushd_ignore_dups
-setopt prompt_subst
 setopt transient_rprompt
 setopt notify
 
-git_branch() {
-    local ref=$(git symbolic-ref HEAD 2>/dev/null)
-    if [[ -n "$ref" ]]; then
-        printf "${1:-%s}" "${ref##*/}"
+setopt print_eight_bit
+setopt prompt_subst
+setopt sh_word_split
+setopt no_beep
+
+git_status() {
+    local s="$(git status --short --branch 2>/dev/null)"
+    if [[ -n "$s" ]]; then
+        echo $s    # collapse sequences of whitespace into a single space
     fi
 }
 PROMPT=$'%(?..%{\e[41m%}exit %?%{\e[0m%}\n)\n%{\e[33m%}%n@%m%{\e[0m%}:%~\n%# '
-RPROMPT=$'%{\e[36m%}$(git_branch "(%s)")%{\e[0m%}'
+RPROMPT=$'%{\e[36m%}$(git_status)%{\e[0m%}'
 
 if [[ "$TERM" =~ ^screen ]]; then
     precmd() {
