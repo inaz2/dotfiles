@@ -20,40 +20,37 @@ if [[ -n "$PS1" ]]; then
 
     stty sane erase ^? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
 
-    exit_status() {
-        local s=$?
-        if [[ $s -ne 0 ]]; then
-            echo "exit $s"
-            echo -n ' '    # workaround to preserve newline in Command Substitution
-        fi
-    }
     git_status() {
         local s="$(git status --short --branch 2>/dev/null)"
         if [[ -n "$s" ]]; then
             echo $s    # collapse sequences of whitespace into a single space
         fi
     }
-    PS1=$'\[\e[41m\]$(exit_status)\[\e[0m\]\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]$(git_status)\[\e[0m\]\n\$ '
+    PS1=$'\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]$(git_status)\[\e[0m\]\n\$ '
 
     __precmd_hook() {
+        local s=$?
         trap __preexec_hook DEBUG
-        precmd
+        precmd $s
     }
     __preexec_hook() {
         trap - DEBUG
-        preexec
+        preexec "$BASH_COMMAND"
     }
     PROMPT_COMMAND=__precmd_hook
 
     precmd() {
         history -a
+        if [[ $1 -ne 0 ]]; then
+            echo -e "\e[41mexit $1\e[0m"
+        fi
         if [[ "$TERM" =~ ^screen ]]; then
             echo -en "\033k${PWD##*/}\033\0134"
         fi
     }
     preexec() {
         if [[ "$TERM" =~ ^screen ]]; then
-            echo -en "\033k!${BASH_COMMAND%% *}\033\0134"
+            echo -en "\033k!${1%% *}\033\0134"
         fi
     }
 

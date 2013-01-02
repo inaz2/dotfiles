@@ -50,7 +50,7 @@ if [[ "$TERM" =~ ^screen ]]; then
         echo -en "\033k${PWD##*/}\033\0134"
     }
     preexec() {
-        echo -en "\033k!${BASH_COMMAND%% *}\033\0134"
+        echo -en "\033k!${1%% *}\033\0134"
     }
 fi
 
