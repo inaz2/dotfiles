@@ -17,6 +17,3 @@
 
 [push]
         default = current
-
-[credential]
-        helper = cache
