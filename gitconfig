@@ -9,11 +9,15 @@
         br = branch
         df = diff
         lg = log -p
+        lc = log ORIG_HEAD.. --stat --no-merges
         tree = log --graph --format='%C(yellow)%h %C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset'
         on = !git status --porcelain | git commit -a -F -
 
 [color]
         ui = auto
+
+[i18n]
+        commitencoding = utf-8
 
 [push]
         default = current
