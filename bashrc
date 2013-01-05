@@ -54,6 +54,10 @@ if [[ -n "$PS1" ]]; then
         fi
     }
 
+    complete -c sudo
+    complete -c man
+    complete -v unset
+
     unalias -a
     alias ls='ls -CF --color=auto'
     alias la='ls -A'
