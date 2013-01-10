@@ -24,3 +24,6 @@
 			(awk-mode . "awk")
 			(other . "stroustrup")))
 (setq-default indent-tabs-mode nil)
+
+;; let "C-x C-b" open in the current window
+(global-set-key (kbd "\C-x\C-b") 'buffer-menu)
