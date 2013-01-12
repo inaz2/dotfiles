@@ -66,4 +66,7 @@ if [[ -n "$PS1" ]]; then
     alias psgrep='ps aux | grep'
 
     eval $(dircolors -b)
+
+    # let "M-/" cycle the list of possible completions
+    bind '"\e/":menu-complete'
 fi
