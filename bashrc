@@ -44,6 +44,9 @@ if [[ -n "$PS1" ]]; then
         if [[ $1 -ne 0 ]]; then
             echo -e "\e[41mexit $1\e[0m"
         fi
+        if [[ "$TERM" =~ ^xterm ]]; then
+            echo -en "\033]0;$USER@$HOSTNAME\007"
+        fi
         if [[ "$TERM" =~ ^screen ]]; then
             echo -en "\033k${PWD##*/}\033\0134"
         fi

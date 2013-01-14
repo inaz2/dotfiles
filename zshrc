@@ -45,14 +45,19 @@ git_status() {
 PROMPT=$'%(?..%{\e[41m%}exit %?%{\e[0m%}\n)\n%{\e[33m%}%n@%m%{\e[0m%}:%~\n%# '
 RPROMPT=$'%{\e[36m%}$(git_status)%{\e[0m%}'
 
-if [[ "$TERM" =~ ^screen ]]; then
-    precmd() {
+precmd() {
+    if [[ "$TERM" =~ ^xterm ]]; then
+        echo -en "\033]0;$USER@$HOSTNAME\007"
+    fi
+    if [[ "$TERM" =~ ^screen ]]; then
         echo -en "\033k${PWD##*/}\033\0134"
-    }
-    preexec() {
+    fi
+}
+preexec() {
+    if [[ "$TERM" =~ ^screen ]]; then
         echo -en "\033k!${1%% *}\033\0134"
-    }
-fi
+    fi
+}
 
 alias ls='ls -CF --color=auto'
 alias la='ls -A'
