@@ -10,7 +10,8 @@
         df = diff
         lg = log -p
         lc = log ORIG_HEAD.. --stat --no-merges
-        tree = log --graph --format='%C(yellow)%h %C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset'
+        lol = log --graph --format='%C(yellow)%h%C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset'
+        lola = log --graph --format='%C(yellow)%h%C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset' --all
         on = !git status --porcelain | git commit -a -F -
 
 [color]
