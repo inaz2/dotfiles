@@ -21,9 +21,10 @@ if [[ -n "$PS1" ]]; then
     stty sane erase ^? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
 
     git_status() {
-        local s="$(git status --short --branch 2>/dev/null)"
-        if [[ -n "$s" ]]; then
-            echo $s    # collapse sequences of whitespace into a single space
+        local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+        if [[ -n "$branch" ]]; then
+            local status="$(git status --short --untracked-files=no 2>/dev/null)"
+            echo "## $branch" $status    # collapse sequences of whitespace into a single space
         fi
     }
     PS1=$'\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]$(git_status)\[\e[0m\]\n\$ '

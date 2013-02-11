@@ -37,9 +37,10 @@ setopt sh_word_split
 setopt no_beep
 
 git_status() {
-    local s="$(git status --short --branch 2>/dev/null)"
-    if [[ -n "$s" ]]; then
-        echo $s    # collapse sequences of whitespace into a single space
+    local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    if [[ -n "$branch" ]]; then
+        local status="$(git status --short --untracked-files=no 2>/dev/null)"
+        echo "## $branch" $status    # collapse sequences of whitespace into a single space
     fi
 }
 PROMPT=$'%(?..%{\e[41m%}exit %?%{\e[0m%}\n)\n%{\e[33m%}%n@%m%{\e[0m%}:%~\n%# '
