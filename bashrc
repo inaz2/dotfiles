@@ -4,6 +4,7 @@ shopt -u sourcepath
 
 if [[ -n "$PS1" ]]; then
     export LANG=C.UTF-8
+    export EDITOR=vi
     unset MAIL
 
     HISTSIZE=100000

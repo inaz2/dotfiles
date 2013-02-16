@@ -2,6 +2,7 @@ stty sane erase ^\? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
 bindkey -e
 
 export LANG=C.UTF-8
+export EDITOR=vi
 unset MAIL
 
 HISTFILE=~/.zsh_history
