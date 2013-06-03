@@ -66,7 +66,7 @@ if [[ -n "$PS1" ]]; then
     alias l='less'
     alias grep='LC_CTYPE=C grep --color=auto'
     alias ox='od -Ax -tx1z'
-    alias emacs='emacs -nw -rv'
+    alias ec='emacsclient -t --alternate-editor=""'
     alias wget='wget --no-check-certificate'
     alias psgrep='ps aux | grep'
 
