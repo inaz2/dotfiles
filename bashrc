@@ -3,7 +3,7 @@ ulimit -c 0
 shopt -u sourcepath
 
 if [[ -n "$PS1" ]]; then
-    export LANG=C.UTF-8
+    export LANG=en_US.UTF-8
     export EDITOR=vi
     unset MAIL
 
