@@ -49,12 +49,12 @@ if [[ -n "$PS1" ]]; then
         if [[ "$TERM" =~ ^xterm ]]; then
             echo -en "\033]0;$USER@$HOSTNAME\007"
         fi
-        if [[ "$TERM" =~ ^screen ]]; then
+        if [[ "$STY" ]]; then
             echo -en "\033k${PWD##*/}\033\0134"
         fi
     }
     preexec() {
-        if [[ "$TERM" =~ ^screen ]]; then
+        if [[ "$STY" ]]; then
             echo -en "\033k!${1%% *}\033\0134"
         fi
     }
@@ -63,12 +63,27 @@ if [[ -n "$PS1" ]]; then
     alias ls='ls -CF --color=auto'
     alias la='ls -A'
     alias ll='ls -al'
-    alias l='less'
     alias grep='LC_CTYPE=C grep --color=auto'
     alias ox='od -Ax -tx1z'
     alias ec='emacsclient -t --alternate-editor=""'
     alias wget='wget --no-check-certificate'
-    alias psgrep='ps aux | grep'
+
+    l() {
+        # stdin is a terminal and the first argument is nothing or a directory
+        if [[ (-t 0) && ($# -eq 0 || -d "$1") ]]; then
+            ls -ACF --color=auto "$@"
+        else
+            ${PAGER:-less} "$@"
+        fi
+    }
+
+    p() {
+        if [[ $# -gt 0 ]]; then
+            ps auxww | grep "$@"
+        else
+            ps aux
+        fi
+    }
 
     eval $(dircolors -b)
 
