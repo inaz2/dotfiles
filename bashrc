@@ -83,9 +83,17 @@ if [[ -n "$PS1" ]]; then
 
     p() {
         if [[ $# -gt 0 ]]; then
-            ps auxww | grep "$@"
+            ps auxww | LC_CTYPE=C grep --color=auto "$@"
         else
             ps aux
+        fi
+    }
+
+    h() {
+        if [[ $# -gt 0 ]]; then
+            history | LC_CTYPE=C grep --color=auto "$@"
+        else
+            history 50
         fi
     }
 
