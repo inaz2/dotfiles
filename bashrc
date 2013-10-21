@@ -69,6 +69,7 @@ if [[ -n "$PS1" ]]; then
     alias ll='ls -al'
     alias grep='LC_CTYPE=C grep --color=auto'
     alias ox='od -Ax -tx1z'
+    alias objdump='objdump --disassembler-options=intel'
     alias ec='emacsclient -t --alternate-editor=""'
     alias wget='wget --no-check-certificate'
 
