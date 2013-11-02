@@ -76,7 +76,7 @@ if [[ -n "$PS1" ]]; then
     l() {
         # stdin is a terminal and the first argument is nothing or a directory
         if [[ (-t 0) && ($# -eq 0 || -d "$1") ]]; then
-            ls -ACF --color=auto "$@"
+            ls -alF --color=auto "$@"
         else
             ${PAGER:-less} "$@"
         fi
