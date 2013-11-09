@@ -32,36 +32,20 @@ if [[ -n "$PS1" ]]; then
             fi
         fi
     }
-    PS1=$'\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]$(git_status)\[\e[0m\]\n\$ '
+    PS1='\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]$(git_status)\[\e[0m\]\n\[\ek\e\\\]\$ '
 
-    __precmd_hook() {
-        local s=$?
-        trap __preexec_hook DEBUG
-        precmd $s
-    }
-    __preexec_hook() {
-        trap - DEBUG
-        preexec "$BASH_COMMAND"
-    }
-    PROMPT_COMMAND=__precmd_hook
-
-    precmd() {
+    prompt_command() {
+        local status=$?
         history -a
-        if [[ $1 -ne 0 ]]; then
-            echo -e "\e[41mexit $1\e[0m"
+        if [[ $status -ne 0 ]]; then
+            echo -e "\e[41mexit $status\e[0m"
         fi
         if [[ "$TERM" =~ ^xterm ]]; then
             echo -en "\033]0;$USER@$HOSTNAME\007"
         fi
-        if [[ "$STY" ]]; then
-            echo -en "\033k${PWD##*/}\033\0134"
-        fi
     }
-    preexec() {
-        if [[ "$STY" ]]; then
-            echo -en "\033k!${1%% *}\033\0134"
-        fi
-    }
+
+    PROMPT_COMMAND=prompt_command
 
     unalias -a
     alias ls='ls -CF --color=auto'
