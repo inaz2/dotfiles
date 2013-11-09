@@ -1,20 +1,29 @@
 escape ^Tt
 bind ^G
-bind g
 
 startup_message off
-term screen-256color
-deflogin on
+term xterm-256color
 defscrollback 10000
-vbell off
 autodetach on
 altscreen on
+zombie q onerror
 
+# just from man page
 hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
 caption string "%?%F%{.R.}%?%3n %t%? [%h]%?"
 
-attrcolor b ".I"
-termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
-defbce on
-
+# enable "Dynamic Titles" feature
 shelltitle "$ |bash"
+
+bind w windowlist -b
+
+# operate regions like emacs
+bind x command -c escape-x-map
+bind -c escape-x-map 2 split
+bind -c escape-x-map 3 split -v
+bind -c escape-x-map o focus
+bind -c escape-x-map 1 only
+bind -c escape-x-map 0 remove
+bind -c escape-x-map } resize +10
+bind -c escape-x-map { resize -10
+bind -c escape-x-map + resize =
