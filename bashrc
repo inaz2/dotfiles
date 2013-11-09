@@ -50,16 +50,17 @@ if [[ -n "$PS1" ]]; then
     alias ll='ls -al'
     alias grep='LC_CTYPE=C grep --color=auto'
     alias ox='od -Ax -tx1z'
-    alias objdump='objdump --disassembler-options=intel'
+    alias objdump='objdump -M intel'
     alias ec='emacsclient -t --alternate-editor=""'
     alias wget='wget --no-check-certificate'
+    alias s='screen -U'
 
     l() {
-        # stdin is a terminal and the first argument is nothing or a directory
-        if [[ (-t 0) && ($# -eq 0 || -d "$1") ]]; then
-            ls -alF --color=auto "$@"
-        else
+        # if the argument is a single file or stdin is pipe
+        if [[ ($# -eq 1 && -f "$1") || (-p /dev/stdin) ]]; then
             ${PAGER:-less} "$@"
+        else
+            ls -alF --color=auto "$@"
         fi
     }
 
