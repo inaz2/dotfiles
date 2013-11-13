@@ -4,6 +4,7 @@ shopt -u sourcepath
 
 if [[ -n "$PS1" ]]; then
     export LANG=en_US.UTF-8
+    export TERM=xterm-256color
     export EDITOR=vi
     unset MAIL
 
