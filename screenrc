@@ -12,6 +12,10 @@ zombie q onerror
 hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
 caption string "%?%F%{.R.}%?%3n %t%? [%h]%?"
 
+# show hardstatus in windowlist
+windowlist title "Num Name%=Flags"
+windowlist string "%3n %t%? [%h]%?%=%f"
+
 # enable "Dynamic Titles" feature
 shelltitle "$ |bash"
 
