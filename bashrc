@@ -23,27 +23,28 @@ if [[ -n "$PS1" ]]; then
     stty sane erase ^? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
 
     git_status() {
-        local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-        if [[ -n "$branch" ]]; then
-            local status="$(git status --short --untracked-files=no 2>/dev/null)"
-            if [[ -n "$status" ]]; then
-                echo "** $branch"
-            else
+        local status="$(git status --untracked-files=no 2>/dev/null)"
+        local re_branch=$'^# On branch ([^\n]+)'
+        if [[ "$status" =~ $re_branch ]]; then
+            local branch="${BASH_REMATCH[1]}"
+            if [[ "$status" =~ $'\nnothing to commit' ]]; then
                 echo "-- $branch"
+            else
+                echo "** $branch"
             fi
         fi
     }
-    PS1='\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]$(git_status)\[\e[0m\]\n\[\ek\e\\\]\$ '
+    __set_xterm_title='\[\033]0;\u@\h:\w\007\]'
+    __set_screen_title='\[\033k\033\134\]'
+    PS1="${__set_xterm_title}\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]\$(git_status)\[\e[0m\]\n${__set_screen_title}\$ "
 
-    prompt_command() {
-        history -a
-        if [[ "$TERM" =~ ^xterm ]]; then
-            echo -en "\033]0;$USER@$HOSTNAME\007"
-        fi
-    }
-
-    PROMPT_COMMAND=prompt_command
+    PROMPT_COMMAND='history -a'
     trap 'echo -e "\e[41mexit $?\e[0m"' ERR
+
+    eval "$(dircolors -b)"
+
+    # let "M-/" cycle the list of possible completions
+    bind '"\e/":menu-complete'
 
     unalias -a
     alias ls='ls -CF --color=auto'
@@ -80,9 +81,4 @@ if [[ -n "$PS1" ]]; then
             history 50
         fi
     }
-
-    eval $(dircolors -b)
-
-    # let "M-/" cycle the list of possible completions
-    bind '"\e/":menu-complete'
 fi
