@@ -10,7 +10,9 @@ for i in *; do
     $script_name|README)
         ;;
     *)
-        ln -s "$PWD/$i" "$HOME/.$i"
+        if [[ $(readlink -e "$HOME/.$i") != "$PWD/$i" ]]; then
+            ln -s "$PWD/$i" "$HOME/.$i"
+        fi
         ;;
     esac
 done
