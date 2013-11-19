@@ -23,14 +23,13 @@ if [[ -n "$PS1" ]]; then
     stty sane erase ^? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
 
     git_status() {
-        local status="$(git status --untracked-files=no 2>/dev/null)"
-        local re_branch=$'^# On branch ([^\n]+)'
-        if [[ "$status" =~ $re_branch ]]; then
-            local branch="${BASH_REMATCH[1]}"
-            if [[ "$status" =~ $'\nnothing to commit' ]]; then
-                echo "-- $branch"
-            else
+        local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+        if [[ -n "$branch" ]]; then
+            local status="$(git status --short --untracked-files=no 2>/dev/null)"
+            if [[ -n "$status" ]]; then
                 echo "** $branch"
+            else
+                echo "-- $branch"
             fi
         fi
     }
