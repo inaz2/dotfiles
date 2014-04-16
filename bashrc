@@ -34,7 +34,7 @@ if [[ -n "$PS1" ]]; then
         fi
     }
     __set_xterm_title='\[\033]0;\u@\h:\w\007\]'
-    __set_screen_title='\[\033k\033\134\]'
+    __set_screen_title='\[\033k\h\033\134\]'
     PS1="${__set_xterm_title}\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]\$(git_status)\[\e[0m\]\n${__set_screen_title}\$ "
 
     PROMPT_COMMAND='history -a'
