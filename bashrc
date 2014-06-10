@@ -1,5 +1,4 @@
 umask 022
-ulimit -c 0
 shopt -u sourcepath
 
 if [[ -n "$PS1" ]]; then
@@ -44,6 +43,9 @@ if [[ -n "$PS1" ]]; then
 
     # let "M-/" cycle the list of possible completions
     bind '"\e/":menu-complete'
+
+    # let "C-b" change the current directory to $OLDPWD
+    bind '"\C-b":"cd -\n"'
 
     unalias -a
     alias ls='ls -CF --color=auto'
