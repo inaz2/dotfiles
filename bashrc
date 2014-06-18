@@ -33,8 +33,9 @@ if [[ -n "$PS1" ]]; then
         fi
     }
     __set_xterm_title='\[\033]0;\u@\h:\w\007\]'
-    __set_screen_title='${STY:+\[\033k\h\033\134\]}'
-    PS1="${__set_xterm_title}\n\[\e[33m\]\u@\h:\[\e[0m\]\w \[\e[36m\]\$(git_status)\[\e[0m\]\n${__set_screen_title}\$ "
+    __set_screen_title='\[\033k\h\033\134\]'
+    __ssh_connection=($SSH_CONNECTION)
+    PS1="${__set_xterm_title}\n\[\e[33m\]\u@${__ssh_connection[2]:-localhost}:\[\e[0m\]\w \[\e[36m\]\$(git_status)\[\e[0m\]\n${__set_screen_title}\$ "
 
     PROMPT_COMMAND='history -a'
     trap 'echo -e "\e[41mexit $?\e[0m"' ERR
