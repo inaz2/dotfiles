@@ -46,7 +46,7 @@ if [[ -n "$PS1" ]]; then
     bind '"\e/":menu-complete'
 
     # let "C-b" change the current directory to $OLDPWD
-    bind '"\C-b":"cd -\n"'
+    bind '"\C-b":"\ercd -\n"'
 
     unalias -a
     alias ls='ls -CF --color=auto'
