@@ -72,7 +72,7 @@ if [[ -n "$PS1" ]]; then
 
     p() {
         if [[ $# -gt 0 ]]; then
-            ps auxww | LC_CTYPE=C grep --color=auto "$@"
+            ps auxww | LC_CTYPE=C grep --color=auto "$*"
         else
             ps aux
         fi
@@ -80,9 +80,23 @@ if [[ -n "$PS1" ]]; then
 
     h() {
         if [[ $# -gt 0 ]]; then
-            history | LC_CTYPE=C grep --color=auto "$@"
+            history | LC_CTYPE=C grep --color=auto "$*"
         else
             history 50
+        fi
+    }
+
+    diffu() {
+        local DIFF
+        if type -p git >/dev/null 2>&1; then
+            DIFF="git diff --no-index"
+        else
+            DIFF="diff -u"
+        fi
+        if [[ $# -eq 1 ]]; then
+            $DIFF "$1~" "$1"
+        else
+            $DIFF "$@"
         fi
     }
 fi
