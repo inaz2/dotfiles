@@ -86,6 +86,10 @@ if [[ -n "$PS1" ]]; then
         fi
     }
 
+    cutf() {
+        sed -E 's/\s+/ /g' | cut -d ' ' -f "$@"
+    }
+
     diffu() {
         local DIFF
         if type -p git >/dev/null 2>&1; then
