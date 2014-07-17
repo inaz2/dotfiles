@@ -103,4 +103,44 @@ if [[ -n "$PS1" ]]; then
             $DIFF "$@"
         fi
     }
+
+    dropcolor() {
+        sed -E 's/\x1b\[[0-9;]+m//g' "$@"
+    }
+
+    pack() {
+        echo "$*" | perl -ne 's/([0-9A-F]{2})/print pack("H2",$1)/eig'
+    }
+
+    grepb() {
+        grep -boa $@ | awk -F: '{printf "0x%x\n", $1}'
+    }
+
+    rotn() {
+        local TABLE='ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
+        for i in $(seq 26); do
+            echo "$*" | tr "${TABLE:0:26}${TABLE:52:26}" "${TABLE:$i:26}${TABLE:52+$i:26}"
+        done
+    }
+
+    xlines() {
+        if [[ "$1" == "-1" ]]; then
+            shift
+            while read; do echo -n "$REPLY" | "$@"; echo; done
+        else
+            while read; do echo -n "$REPLY" | "$@"; done
+        fi
+    }
+
+    asm() {
+        if [[ "$1" == "-d" ]]; then
+            shift
+            local TEMPFILE=$(mktemp)
+            echo -n "$*" > "$TEMPFILE"
+            objdump -M intel -D -b binary -m i386 "$TEMPFILE" | tail -n+8
+            rm -f "$TEMPFILE"
+        else
+            echo "$*" | as -msyntax=intel -mnaked-reg -aln -o /dev/null
+        fi
+    }
 fi
