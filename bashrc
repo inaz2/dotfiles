@@ -56,7 +56,7 @@ if [[ -n "$PS1" ]]; then
     alias sort='LC_ALL=C sort'
     alias ox='od -Ax -tx1z'
     alias objdump='objdump -M intel'
-    alias gdb='gdb -q -ex "set disassembly-flavor intel" -ex "disp/i \$pc"'
+    alias gdb='gdb -q -x ~/.gdbinit'
     alias ec='emacsclient -t --alternate-editor=""'
     alias wget='wget --no-check-certificate'
     alias s='screen -U'
