@@ -136,11 +136,11 @@ if [[ -n "$PS1" ]]; then
         if [[ "$1" == "-d" ]]; then
             shift
             local TEMPFILE=$(mktemp)
-            echo -n "$*" > "$TEMPFILE"
-            objdump -M intel -D -b binary -m i386 "$TEMPFILE" | tail -n+8
+            echo -n "$1" > "$TEMPFILE"
+            objdump -M intel -D -b binary -m i386 "$TEMPFILE" | sed '1,7d'
             rm -f "$TEMPFILE"
         else
-            echo "$*" | as -msyntax=intel -mnaked-reg -aln -o /dev/null
+            echo "$1" | as -msyntax=intel -mnaked-reg -aln -o /dev/null
         fi
     }
 fi
