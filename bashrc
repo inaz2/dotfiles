@@ -7,9 +7,9 @@ if [[ -n "$PS1" ]]; then
     export EDITOR=vi
     unset MAIL
 
-    HISTSIZE=100000
-    HISTFILESIZE=100000
+    HISTSIZE=1000000
     HISTCONTROL=ignoreboth
+    unset HISTFILESIZE
 
     shopt -s histappend
     shopt -s histverify
@@ -64,7 +64,7 @@ if [[ -n "$PS1" ]]; then
     l() {
         # if the argument is a single file or stdin is pipe
         if [[ ($# -eq 1 && -f "$1") || (-p /dev/stdin) ]]; then
-            ${PAGER:-less} "$@"
+            ${PAGER:-less -R} "$@"
         else
             ls -alF --color=auto "$@"
         fi
@@ -84,6 +84,19 @@ if [[ -n "$PS1" ]]; then
         else
             history 50
         fi
+    }
+
+    cats() {
+        local CODE
+        read -r -d '' CODE <<"__EOF__"
+import sys, locale, chardet
+
+text = sys.stdin.read()
+locale = locale.getdefaultlocale() or 'UTF-8'
+result = chardet.detect(text)
+sys.stdout.write(text.decode(result['encoding'], 'replace').encode(locale[1]))
+__EOF__
+        cat "$@" | python -c "$CODE"
     }
 
     cutf() {
@@ -108,39 +121,13 @@ if [[ -n "$PS1" ]]; then
         sed -E 's/\x1b\[[0-9;]+m//g' "$@"
     }
 
-    pack() {
-        echo "$*" | perl -ne 's/([0-9A-F]{2})/print pack("H2",$1)/eig'
-    }
-
     grepb() {
-        grep -boa $@ | awk -F: '{printf "0x%x\n", $1}'
-    }
-
-    rotn() {
-        local TABLE='ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz'
-        for i in $(seq 26); do
-            echo "$*" | tr "${TABLE:0:26}${TABLE:52:26}" "${TABLE:$i:26}${TABLE:52+$i:26}"
-        done
+        local bytes=$(echo "$1" | perl -ne 's/([0-9A-F]{2})/print pack("H2",$1)/eig')
+        shift
+        grep -boa "$bytes" "$@" | awk -F: '{printf "0x%x\n", $1}'
     }
 
     xlines() {
-        if [[ "$1" == "-1" ]]; then
-            shift
-            while read; do echo -n "$REPLY" | "$@"; echo; done
-        else
-            while read; do echo -n "$REPLY" | "$@"; done
-        fi
-    }
-
-    asm() {
-        if [[ "$1" == "-d" ]]; then
-            shift
-            local TEMPFILE=$(mktemp)
-            echo -n "$1" > "$TEMPFILE"
-            objdump -M intel -D -b binary -m i386 "$TEMPFILE" | sed '1,7d'
-            rm -f "$TEMPFILE"
-        else
-            echo "$1" | as -msyntax=intel -mnaked-reg -aln -o /dev/null
-        fi
+        while read; do echo -n "$REPLY" | "$@" | perl -ple ''; done
     }
 fi
