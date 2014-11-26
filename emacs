@@ -28,6 +28,21 @@
 ;; let "C-x C-b" open in the current window
 (global-set-key (kbd "\C-x\C-b") 'buffer-menu)
 
+;; intelligent C-f/C-b
+(defun forward-char-or-dabbrev-expand (arg)
+  (interactive "^p")
+  (if (and (= arg 1) (= (point) (line-end-position)))
+      (dabbrev-expand nil)
+    (forward-char arg)))
+(global-set-key "\C-f" 'forward-char-or-dabbrev-expand)
+
+(defun backward-char-or-backward-kill-word (arg)
+  (interactive "^p")
+  (if (and (= arg 1) (= (point) (line-end-position)))
+      (backward-kill-word 1)
+    (backward-char arg)))
+(global-set-key "\C-b" 'backward-char-or-backward-kill-word)
+
 ;; flymake
 (require 'flymake)
 
