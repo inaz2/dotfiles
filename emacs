@@ -31,16 +31,25 @@
 ;; intelligent C-f/C-b
 (defun forward-char-or-dabbrev-expand (arg)
   (interactive "^p")
-  (if (and (= arg 1) (= (point) (line-end-position)))
-      (dabbrev-expand nil)
-    (forward-char arg)))
+  (cond
+   ((and (= arg 1) (= (point) (line-end-position)))
+    (if (eq last-command this-command)
+        (setq forward-char-or-dabbrev-expand-repeat-count (1+ forward-char-or-dabbrev-expand-repeat-count))
+      (setq forward-char-or-dabbrev-expand-repeat-count 1))
+    (dabbrev-expand nil))
+   (t
+    (forward-char arg))))
 (global-set-key "\C-f" 'forward-char-or-dabbrev-expand)
 
 (defun backward-char-or-backward-kill-word (arg)
   (interactive "^p")
-  (if (and (= arg 1) (= (point) (line-end-position)))
-      (backward-kill-word 1)
-    (backward-char arg)))
+  (cond
+   ((and (= arg 1) (= (point) (line-end-position)))
+    (if (eq last-command 'forward-char-or-dabbrev-expand)
+        (undo forward-char-or-dabbrev-expand-repeat-count)
+      (backward-kill-word 1)))
+   (t
+    (backward-char arg))))
 (global-set-key "\C-b" 'backward-char-or-backward-kill-word)
 
 ;; flymake
