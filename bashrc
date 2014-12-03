@@ -130,4 +130,13 @@ __EOF__
     xlines() {
         while read; do echo -n "$REPLY" | "$@" | perl -ple ''; done
     }
+
+    cd() {
+        command cd "$@"
+        local s=$?
+        if [[ ($s -eq 0) && (${#FUNCNAME[*]} -eq 1) ]]; then
+            history -s cd $(printf "%q" "$PWD")
+        fi
+        return $s
+    }
 fi
