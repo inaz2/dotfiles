@@ -52,14 +52,29 @@ if [[ -n "$PS1" ]]; then
     alias ls='ls -CF --color=auto'
     alias la='ls -A'
     alias ll='ls -al'
-    alias grep='LC_ALL=C grep --color=auto'
-    alias sort='LC_ALL=C sort'
     alias ox='od -Ax -tx1z'
     alias objdump='objdump -M intel'
     alias gdb='gdb -q -x ~/.gdbinit'
     alias ec='emacsclient -t --alternate-editor=""'
     alias wget='wget --no-check-certificate'
     alias s='screen -U'
+
+    grep() {
+        LC_ALL=C command grep --color=auto "$@"
+    }
+
+    sort() {
+        LC_ALL=C command sort "$@"
+    }
+
+    cd() {
+        command cd "$@"
+        local s=$?
+        if [[ ($s -eq 0) && (${#FUNCNAME[*]} -eq 1) ]]; then
+            history -s cd $(printf "%q" "$PWD")
+        fi
+        return $s
+    }
 
     l() {
         # if the argument is a single file or stdin is pipe
@@ -72,7 +87,7 @@ if [[ -n "$PS1" ]]; then
 
     p() {
         if [[ $# -gt 0 ]]; then
-            ps auxww | LC_CTYPE=C grep --color=auto "$*"
+            ps auxww | grep "$@"
         else
             ps aux
         fi
@@ -80,10 +95,14 @@ if [[ -n "$PS1" ]]; then
 
     h() {
         if [[ $# -gt 0 ]]; then
-            history | LC_CTYPE=C grep --color=auto "$*"
+            history | grep "$@"
         else
             history 50
         fi
+    }
+
+    f() {
+        find "${2:-.}" \! -type d \! -path "*/.*" -path "*$1*" |& grep -v -F ": Permission denied" | sort
     }
 
     cats() {
@@ -128,15 +147,6 @@ __EOF__
     }
 
     xlines() {
-        while read; do echo -n "$REPLY" | "$@" | perl -ple ''; done
-    }
-
-    cd() {
-        command cd "$@"
-        local s=$?
-        if [[ ($s -eq 0) && (${#FUNCNAME[*]} -eq 1) ]]; then
-            history -s cd $(printf "%q" "$PWD")
-        fi
-        return $s
+        while read; do echo -n "$REPLY" | "$@"; done
     }
 fi
