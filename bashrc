@@ -42,11 +42,19 @@ if [[ -n "$PS1" ]]; then
     set -o pipefail
     trap 'echo -e "\e[41mexit ${PIPESTATUS[*]}\e[0m"' ERR
 
-    # let "M-/" cycle the list of possible completions
-    bind '"\e/":menu-complete'
+    # let "M-n/p" do partial history search
+    bind '"\en":history-search-forward'
+    bind '"\ep":history-search-backward'
+
+    # let "M-/" attempt menu completion from history
+    bind '"\e/":dabbrev-expand'
 
     # let "C-b" change the current directory to $OLDPWD
     bind '"\C-b":"\ercd -\n"'
+
+    # let "M-h/?" open the man page / help of the command (like zsh's run-help)
+    bind -x '"\eh":"[[ -n $READLINE_LINE ]] && man 1 ${READLINE_LINE%% *}"'
+    bind -x '"\e?":"[[ -n $READLINE_LINE ]] && (${READLINE_LINE%% *} --help) |& ${PAGER:-less}"'
 
     unalias -a
     alias ls='ls -CF --color=auto'
