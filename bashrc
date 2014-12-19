@@ -15,9 +15,9 @@ if [[ -n "$PS1" ]]; then
     shopt -s histverify
     shopt -s histreedit
     shopt -s checkwinsize
-    shopt -u hostcomplete
     shopt -s checkhash
     shopt -s no_empty_cmd_completion
+    shopt -u hostcomplete
 
     stty sane erase ^? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
 
@@ -38,9 +38,9 @@ if [[ -n "$PS1" ]]; then
     PS1="${__set_xterm_title}\n\[\e[33m\]\u@${__ssh_connection[2]:-localhost}:\[\e[0m\]\w \[\e[36m\]\$(git_status)\[\e[0m\]\n${__set_screen_title}\$ "
 
     PROMPT_COMMAND='history -a'
-    trap 'echo -e "\e[41mexit $?\e[0m"' ERR
 
-    eval "$(dircolors -b)"
+    set -o pipefail
+    trap 'echo -e "\e[41mexit ${PIPESTATUS[*]}\e[0m"' ERR
 
     # let "M-/" cycle the list of possible completions
     bind '"\e/":menu-complete'
