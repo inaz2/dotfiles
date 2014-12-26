@@ -103,7 +103,7 @@ if [[ -n "$PS1" ]]; then
 
     h() {
         if [[ $# -gt 0 ]]; then
-            history | grep "$@"
+            history | tac | sort -k2 -u | sort | grep "$@"
         else
             history 50
         fi
