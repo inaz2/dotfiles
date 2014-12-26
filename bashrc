@@ -42,12 +42,8 @@ if [[ -n "$PS1" ]]; then
     set -o pipefail
     trap 'echo -e "\e[41mexit ${PIPESTATUS[*]}\e[0m"' ERR
 
-    # let "M-n/p" do partial history search
-    bind '"\en":history-search-forward'
-    bind '"\ep":history-search-backward'
-
     # let "M-/" attempt menu completion from history
-    bind '"\e/":dabbrev-expand'
+    bind '"\e/":history-search-backward'
 
     # let "C-b" change the current directory to $OLDPWD
     bind '"\C-b":"\ercd -\n"'
