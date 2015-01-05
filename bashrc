@@ -106,7 +106,7 @@ if [[ -n "$PS1" ]]; then
     }
 
     f() {
-        find "${2:-.}" \! -type d \! -path "*/.*" -path "*$1*" |& grep -v -F ": Permission denied" | sort
+        find "${2:-$PWD}" \! -type d \! -path "*/.*" -path "*$1*" |& grep -v -F ": Permission denied" | sort
     }
 
     cats() {
