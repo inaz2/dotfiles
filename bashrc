@@ -122,10 +122,6 @@ __EOF__
         cat "$@" | python -c "$CODE"
     }
 
-    cutf() {
-        sed -E 's/\s+/ /g' | cut -d ' ' -f "$@"
-    }
-
     diffu() {
         local DIFF
         if type -p git >/dev/null 2>&1; then
@@ -140,8 +136,8 @@ __EOF__
         fi
     }
 
-    dropcolor() {
-        sed -E 's/\x1b\[[0-9;]+m//g' "$@"
+    cutf() {
+        sed -E 's/\s+/ /g' | cut -d ' ' -f "$@"
     }
 
     grepb() {
@@ -152,5 +148,9 @@ __EOF__
 
     xlines() {
         while read; do echo -n "$REPLY" | "$@"; done
+    }
+
+    dropcolor() {
+        sed -E 's/\x1b\[[0-9;]+m//g' "$@"
     }
 fi
