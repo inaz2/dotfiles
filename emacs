@@ -51,37 +51,3 @@
    (t
     (backward-char arg))))
 (global-set-key "\C-b" 'backward-char-or-backward-kill-word)
-
-;; flymake
-(require 'flymake)
-
-(global-set-key "\M-n" 'flymake-goto-next-error)
-(global-set-key "\M-p" 'flymake-goto-prev-error)
-
-(defun display-error-message ()
-  (message (get-char-property (point) 'help-echo)))
-(defadvice flymake-goto-prev-error (after flymake-goto-prev-error-display-message)
-  (display-error-message))
-(defadvice flymake-goto-next-error (after flymake-goto-next-error-display-message)
-  (display-error-message))
-(ad-activate 'flymake-goto-prev-error 'flymake-goto-prev-error-display-message)
-(ad-activate 'flymake-goto-next-error 'flymake-goto-next-error-display-message)
-
-(defun flymake-gcc-init ()
-  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-	 (local-file  (file-relative-name
-                       temp-file
-                       (file-name-directory buffer-file-name))))
-    (list "gcc" (list "-Wall" "-Wextra" "-fsyntax-only" local-file))))
-
-(defun flymake-g++-init ()
-  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-	 (local-file  (file-relative-name
-                       temp-file
-                       (file-name-directory buffer-file-name))))
-    (list "g++" (list "-std=gnu++11" "-Wall" "-Wextra" "-fsyntax-only" local-file))))
-
-(push '("\\.\\(?:c\\|h\\)\\'" flymake-gcc-init) flymake-allowed-file-name-masks)
-(push '("\\.\\(?:cc\\|cpp\\|hpp\\)\\'" flymake-g++-init) flymake-allowed-file-name-masks)
