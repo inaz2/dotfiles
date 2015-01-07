@@ -28,6 +28,12 @@
 ;; let "C-x C-b" open in the current window
 (global-set-key (kbd "\C-x\C-b") 'buffer-menu)
 
+;; let "C-x C-d" dired current directory
+(defun dired-here ()
+  (interactive)
+  (dired "."))
+(global-set-key (kbd "\C-x\C-d") 'dired-here)
+
 ;; intelligent C-f/C-b
 (defun forward-char-or-dabbrev-expand (arg)
   (interactive "^p")
