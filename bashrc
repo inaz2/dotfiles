@@ -21,7 +21,7 @@ if [[ -n "$PS1" ]]; then
 
     stty sane erase ^? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
 
-    git_status() {
+    __git_status() {
         local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
         if [[ -n "$branch" ]]; then
             local status="$(git status --short --untracked-files=no 2>/dev/null)"
@@ -35,7 +35,7 @@ if [[ -n "$PS1" ]]; then
     __set_xterm_title='\[\033]0;\u@\h:\w\007\]'
     __set_screen_title='\[\033k\h\033\134\]'
     __ssh_connection=($SSH_CONNECTION)
-    PS1="${__set_xterm_title}\n\[\e[33m\]\u@${__ssh_connection[2]:-localhost}:\[\e[0m\]\w \[\e[36m\]\$(git_status)\[\e[0m\]\n${__set_screen_title}\$ "
+    PS1="${__set_xterm_title}\n\[\e[33m\]\u@${__ssh_connection[2]:-localhost}:\[\e[0m\]\w \[\e[36m\]\$(__git_status)\[\e[0m\]\n${__set_screen_title}\$ "
 
     PROMPT_COMMAND='history -a'
 
@@ -49,8 +49,19 @@ if [[ -n "$PS1" ]]; then
     bind '"\C-b":"\ercd -\n"'
 
     # let "M-h/?" open the man page / help of the command (like zsh's run-help)
-    bind -x '"\eh":"[[ -n $READLINE_LINE ]] && man 1 ${READLINE_LINE%% *}"'
-    bind -x '"\e?":"[[ -n $READLINE_LINE ]] && (${READLINE_LINE%% *} --help) |& ${PAGER:-less}"'
+    bind -x '"\eh":"__look_at man"'
+    bind -x '"\e?":"__look_at help"'
+
+    __look_at() {
+        local line="${READLINE_LINE/#sudo /}"
+        if [[ -n "$line" ]]; then
+            if [[ "$1" == "man" ]]; then
+                man "${line%% *}"
+            elif [[ "$1" == "help" ]]; then
+                "${line%% *}" --help |& ${PAGER:-less}
+            fi
+        fi
+    }
 
     unalias -a
     alias ls='ls -CF --color=auto'
