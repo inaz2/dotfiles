@@ -25,6 +25,9 @@
 			(other . "stroustrup")))
 (setq-default indent-tabs-mode nil)
 
+;; disable additional highlights in shell-mode
+(setq shell-font-lock-keywords nil)
+
 ;; let "C-x C-b" open in the current window
 (global-set-key (kbd "\C-x\C-b") 'buffer-menu)
 
