@@ -3,7 +3,6 @@ shopt -u sourcepath
 
 if [[ -n "$PS1" ]]; then
     export LANG=en_US.UTF-8
-    export TERM=xterm-256color
     export EDITOR=vi
     unset MAIL
 
@@ -19,7 +18,14 @@ if [[ -n "$PS1" ]]; then
     shopt -s no_empty_cmd_completion
     shopt -u hostcomplete
 
-    stty sane erase ^? intr ^C eof ^D susp ^Z quit ^\\ start ^- stop ^-
+    case "$TERM" in
+         xterm*)
+             __set_xterm_title='\[\033]0;\u@\h:\w\007\]'
+             ;;
+         screen*)
+             __set_screen_title='\[\033k\h\033\134\]'
+             ;;
+    esac
 
     __git_status() {
         local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
@@ -32,8 +38,6 @@ if [[ -n "$PS1" ]]; then
             fi
         fi
     }
-    __set_xterm_title='\[\033]0;\u@\h:\w\007\]'
-    __set_screen_title='\[\033k\h\033\134\]'
     __ssh_connection=($SSH_CONNECTION)
     PS1="${__set_xterm_title}\n\[\e[33m\]\u@${__ssh_connection[2]:-localhost}:\[\e[0m\]\w \[\e[36m\]\$(__git_status)\[\e[0m\]\n${__set_screen_title}\$ "
 
@@ -70,7 +74,7 @@ if [[ -n "$PS1" ]]; then
     alias ox='od -Ax -tx1z'
     alias objdump='objdump -M intel'
     alias gdb='gdb -q -x ~/.gdbinit'
-    alias ec='emacsclient -t --alternate-editor=""'
+    alias ec='TERM=xterm-256color emacsclient -t --alternate-editor=""'
     alias wget='wget --no-check-certificate'
     alias s='screen -U'
 
