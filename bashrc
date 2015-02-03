@@ -62,7 +62,7 @@ if [[ -n "$PS1" ]]; then
             if [[ "$1" == "man" ]]; then
                 man "${line%% *}"
             elif [[ "$1" == "help" ]]; then
-                "${line%% *}" --help |& ${PAGER:-less}
+                "${line%% *}" --help |& ${PAGER:-less -R}
             fi
         fi
     }
