@@ -25,6 +25,8 @@
 			(other . "stroustrup")))
 (setq-default indent-tabs-mode nil)
 
+(ffap-bindings)
+
 ;; disable additional highlights in shell-mode
 (setq shell-font-lock-keywords nil)
 
