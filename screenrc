@@ -20,6 +20,9 @@ shelltitle "$ |bash"
 
 bind w windowlist -b
 
+# let space do meta + echo
+bind " " eval meta "echo 'operating the inner screen...'"
+
 # operate regions like emacs
 bind x command -c escape-x-map
 bind -c escape-x-map 2 split
