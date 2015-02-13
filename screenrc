@@ -7,9 +7,12 @@ autodetach on
 altscreen on
 zombie q onerror
 
+# display time at the right side
+hardstatus alwayslastline "%{=r dd}%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<%-06= %c"
 # just from man page
-hardstatus alwayslastline "%-Lw%{= BW}%50>%n%f* %t%{-}%+Lw%<"
 caption string "%?%F%{.R.}%?%3n %t%? [%h]%?"
+# set message color to white over green
+rendition so "= gW"
 
 # show hardstatus in windowlist
 windowlist title "Num Name%=Flags"
