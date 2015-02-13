@@ -2,7 +2,9 @@ escape ^Tt
 bind ^G
 
 startup_message off
-defscrollback 10000
+term screen-256color
+defscrollback 100000
+defbce on
 autodetach on
 altscreen on
 zombie q onerror
