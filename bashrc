@@ -82,7 +82,6 @@ if [[ -n "$PS1" ]]; then
     alias gdb='gdb -q -x ~/.gdbinit'
     alias ec='TERM=xterm-256color emacsclient -t --alternate-editor=""'
     alias wget='wget --no-check-certificate'
-    alias s='screen -U'
 
     grep() {
         LC_ALL=C command grep --color=auto "$@"
@@ -128,6 +127,10 @@ if [[ -n "$PS1" ]]; then
 
     f() {
         find "${2:-$PWD}" \! -type d \! -path "*/.*" -path "*$1*" |& grep -v -F ": Permission denied" | sort
+    }
+
+    s() {
+        screen -U -t "$1" "$@"
     }
 
     cats() {
