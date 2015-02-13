@@ -23,7 +23,13 @@ if [[ -n "$PS1" ]]; then
              __set_xterm_title='\[\033]0;\u@\h:\w\007\]'
              ;;
          screen*)
-             __set_screen_title='\[\033k\h\033\134\]'
+             if [[ -z "$STY" ]]; then
+                 # if the shell is on the remote server, display hostname
+                 __set_screen_title='\[\033k[\h]\033\134\]'
+             else
+                 # otherwise, display command name or directory name
+                 __set_screen_title='\[\033k\033\134\033k\W\033\134\]'
+             fi
              ;;
     esac
 
