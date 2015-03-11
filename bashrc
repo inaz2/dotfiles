@@ -136,12 +136,12 @@ if [[ -n "$PS1" ]]; then
     cats() {
         local CODE
         read -r -d '' CODE <<"__EOF__"
-import sys, locale, chardet
+import sys, chardet
 
 text = sys.stdin.read()
-locale = locale.getdefaultlocale() or 'UTF-8'
+outenc = sys.stdout.encoding or 'UTF-8'
 result = chardet.detect(text)
-sys.stdout.write(text.decode(result['encoding'], 'replace').encode(locale[1]))
+sys.stdout.write(text.decode(result['encoding'], 'replace').encode(outenc))
 __EOF__
         cat "$@" | python -c "$CODE"
     }
