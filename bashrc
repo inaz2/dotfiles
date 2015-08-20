@@ -4,6 +4,7 @@ shopt -u sourcepath
 if [[ -n "$PS1" ]]; then
     export LANG=en_US.UTF-8
     export EDITOR=vi
+    export LESS='--RAW-CONTROL-CHARS --LONG-PROMPT'
     unset MAIL
 
     HISTSIZE=1000000
@@ -68,7 +69,7 @@ if [[ -n "$PS1" ]]; then
             if [[ "$1" == "man" ]]; then
                 man "${line%% *}"
             elif [[ "$1" == "help" ]]; then
-                "${line%% *}" --help |& ${PAGER:-less -R}
+                "${line%% *}" --help |& ${PAGER:-less}
             fi
         fi
     }
@@ -103,7 +104,7 @@ if [[ -n "$PS1" ]]; then
     l() {
         # if the argument is a single file or stdin is pipe
         if [[ ($# -eq 1 && -f "$1") || (-p /dev/stdin) ]]; then
-            ${PAGER:-less -R} "$@"
+            ${PAGER:-less} "$@"
         else
             ls -alF --color=auto "$@"
         fi
