@@ -178,4 +178,12 @@ __EOF__
     dropcolor() {
         sed -E 's/\x1b\[[0-9;]+m//g' "$@"
     }
+
+    __sudo_cygwin() {
+        /usr/bin/cygstart --action=runas /bin/bash -l -c "${@:-cmd}"
+    }
+
+    if [[ -x "/usr/bin/cygstart" ]]; then
+        alias sudo=__sudo_cygwin
+    fi
 fi
