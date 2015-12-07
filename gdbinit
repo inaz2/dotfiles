@@ -19,3 +19,10 @@ define telescope
     p/s {char *}($arg0)@$arg1
   end
 end
+
+define nc
+  nexti
+  while {char}$pc != (char)0xe8 && {char}$pc != (char)0xc3
+    nexti
+  end
+end
