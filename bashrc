@@ -64,12 +64,13 @@ if [[ -n "$PS1" ]]; then
     bind -x '"\e?":"__look_at help"'
 
     __look_at() {
-        local line="${READLINE_LINE/#sudo /}"
-        if [[ -n "$line" ]]; then
+        local line="${READLINE_LINE##sudo }"
+        local cmd="${line%% *}"
+        if hash "$cmd" &>/dev/null; then
             if [[ "$1" == "man" ]]; then
-                man "${line%% *}"
+                man "$cmd"
             elif [[ "$1" == "help" ]]; then
-                "${line%% *}" --help |& ${PAGER:-less}
+                "$cmd" --help |& ${PAGER:-less}
             fi
         fi
     }
@@ -149,7 +150,7 @@ __EOF__
 
     diffu() {
         local DIFF
-        if type -p git >/dev/null 2>&1; then
+        if hash git &>/dev/null; then
             DIFF="git diff --no-index"
         else
             DIFF="diff -u"
