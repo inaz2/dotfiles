@@ -81,8 +81,8 @@ if [[ -n "$PS1" ]]; then
     alias ll='ls -al'
     alias ox='od -Ax -tx1z'
     alias objdump='objdump -M intel'
-    alias gdb='gdb -q -x ~/.gdbinit'
-    alias ec='TERM=xterm-256color emacsclient -t --alternate-editor=""'
+    alias gdb='gdb -q -nh -x ~/.gdbinit'
+    alias ec='TERM=xterm-256color emacsclient -nw --alternate-editor=""'
     alias wget='wget --no-check-certificate'
 
     grep() {
