@@ -1,28 +1,39 @@
 set disassembly-flavor intel
 set print asm-demangle on
-set print array on
-set print array-indexes on
-set output-radix 16.
 set follow-fork-mode child
 set history filename ~/.gdb_history
 set history save on
-display/i $pc
+set print array on
+set print array-indexes on
 
-define telescope
+define dps
+  init-if-undefined $_=$sp
   if $argc == 0
-    p/s {char *}$sp@16
+    printf "%p\n", $_
+    p {void *}$_@16
+    set $_=$+16
   end
   if $argc == 1
-    p/s {char *}($arg0)@16
+    printf "%p\n", $arg0
+    p {void *}$arg0@16
+    set $_=$+16
   end
   if $argc >= 2
-    p/s {char *}($arg0)@$arg1
+    printf "%p\n", $arg0
+    p {void *}$arg0@$arg1
+    set $_=$+$arg1
   end
 end
 
 define nc
+  disable display
   nexti
-  while {char}$pc != (char)0xe8 && {char}$pc != (char)0xc3
+  info registers rax
+  while {char}$pc != '\xe8' && {char}$pc != '\xc3'
     nexti
   end
+  enable display
+  display
 end
+
+display/i $pc
