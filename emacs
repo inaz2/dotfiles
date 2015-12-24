@@ -30,6 +30,11 @@
 ;; disable additional highlights in shell-mode
 (setq shell-font-lock-keywords nil)
 
+;; global vc-git-grep
+(defun git-grep (regexp)
+  (interactive "sSearch for: ")
+  (vc-git-grep regexp "*" (vc-git-root default-directory)))
+
 ;; let "C-x C-b" open in the current window
 (global-set-key (kbd "\C-x\C-b") 'buffer-menu)
 
