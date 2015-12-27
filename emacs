@@ -25,6 +25,14 @@
 			(other . "stroustrup")))
 (setq-default indent-tabs-mode nil)
 
+(setq diff-switches "-u")
+(custom-set-faces
+ '(diff-header ((t (:foreground "cyan"))) 'now)
+ '(diff-file-header ((t (:foreground "cyan" :bold t))) 'now)
+ '(diff-added ((t (:foreground "green"))) 'now)
+ '(diff-removed ((t (:foreground "red"))) 'now)
+ '(diff-context ((t (:foreground "white"))) 'now))
+
 (ffap-bindings)
 
 ;; disable additional highlights in shell-mode
