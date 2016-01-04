@@ -13,16 +13,19 @@
 (setq inhibit-startup-screen t)
 (global-font-lock-mode 1)
 (transient-mark-mode 1)
-(setq-default show-trailing-whitespace t)
 
 (setq display-time-24hr-format t)
 (display-time)
 (line-number-mode 1)
 (column-number-mode 1)
 
+;(setq-default show-trailing-whitespace t)
+(global-whitespace-mode t)
+(setq whitespace-style '(face trailing tabs empty))
+
 (setq c-default-style '((java-mode . "java")
-			(awk-mode . "awk")
-			(other . "stroustrup")))
+                        (awk-mode . "awk")
+                        (other . "stroustrup")))
 (setq-default indent-tabs-mode nil)
 
 (setq diff-switches "-u")
