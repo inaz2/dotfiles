@@ -78,3 +78,40 @@
    (t
     (backward-char arg))))
 (global-set-key "\C-b" 'backward-char-or-backward-kill-word)
+
+;; flymake
+(require 'flymake)
+
+(defvar flymake-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "M-n") 'flymake-goto-next-error)
+    (define-key map (kbd "M-p") 'flymake-goto-prev-error)
+    map))
+(add-to-list 'minor-mode-map-alist (cons 'flymake-mode flymake-mode-map))
+
+(custom-set-variables
+ '(help-at-pt-timer-delay 0.9)
+ '(help-at-pt-display-when-idle '(flymake-overlay)))
+
+(defun flymake-simple-generic-init (cmd &optional opts)
+  (let* ((temp-file  (flymake-init-create-temp-buffer-copy
+                      'flymake-create-temp-inplace))
+         (local-file (file-relative-name
+                      temp-file
+                      (file-name-directory buffer-file-name))))
+    (list cmd (append opts (list local-file)))))
+
+(defun flymake-simple-make-or-generic-init (cmd &optional opts)
+  (if (file-exists-p "Makefile")
+      (flymake-simple-make-init)
+    (flymake-simple-generic-init cmd opts)))
+
+(defun flymake-c-init ()
+  (flymake-simple-make-or-generic-init
+   "gcc" '("-Wall" "-Wextra" "-fsyntax-only")))
+(defun flymake-cc-init ()
+  (flymake-simple-make-or-generic-init
+   "g++" '("-Wall" "-Wextra" "-fsyntax-only")))
+
+(add-to-list 'flymake-allowed-file-name-masks '("\\.c\\'" flymake-c-init))
+(add-to-list 'flymake-allowed-file-name-masks '("\\.\\(?:cc\\|cpp\\)\\'" flymake-cc-init))
