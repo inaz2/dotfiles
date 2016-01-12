@@ -18,8 +18,8 @@
 [color]
         ui = auto
 
-[i18n]
-        commitencoding = utf-8
+[core]
+        quotepath = false
 
 [push]
         default = current
