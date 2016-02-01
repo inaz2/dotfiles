@@ -46,7 +46,7 @@ if [[ -n "$PS1" ]]; then
         fi
     }
     __ssh_connection=($SSH_CONNECTION)
-    PS1="${__set_xterm_title}\n\[\e[33m\]\u@${__ssh_connection[2]:-localhost}:\[\e[0m\]\w \[\e[36m\]\$(__git_status)\[\e[0m\]\n${__set_screen_title}\\$ "
+    PS1="\[\a\]${__set_xterm_title}\n\[\e[33m\]\u@${__ssh_connection[2]:-localhost}:\[\e[0m\]\w \[\e[36m\]\$(__git_status)\[\e[0m\]\n${__set_screen_title}\\$ "
 
     PROMPT_COMMAND='history -a'
 
