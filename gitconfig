@@ -5,15 +5,14 @@
 [alias]
         st = status
         co = checkout
-        ci = commit
-        cia = commit --amend --no-edit
+        ci = commit -v
         br = branch
         df = diff
+        pf = pull --ff-only
         lg = log -p
         lc = log ORIG_HEAD.. --stat --no-merges
         lol = log --graph --format='%C(yellow)%h%C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset'
         lola = log --graph --format='%C(yellow)%h%C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset' --all
-        pf = pull --ff-only
 
 [color]
         ui = auto
