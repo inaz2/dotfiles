@@ -55,6 +55,13 @@
   (dired "."))
 (global-set-key (kbd "\C-x\C-d") 'dired-here)
 
+;; filter-region
+(defun filter-region ()
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+       (call-interactively 'shell-command-on-region)))
+(global-set-key (kbd "\C-x|") 'filter-region)
+
 ;; intelligent C-f/C-b
 (defun forward-char-or-dabbrev-expand (arg)
   (interactive "^p")
