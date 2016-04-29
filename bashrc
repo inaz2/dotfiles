@@ -181,6 +181,10 @@ __EOF__
         sed -E 's/\x1b\[[0-9;]+m//g' "$@"
     }
 
+    diffdump() {
+        diff -u1 -F '>:$' -I '[0-9a-f]\{6,\}' <(objdump -d "$1" | cut -f2-) <(objdump -d "$2" | cut -f2-)
+    }
+
     __sudo_cygwin() {
         /usr/bin/cygstart --action=runas /bin/bash -l -c "${@:-cmd}"
     }
