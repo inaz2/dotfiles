@@ -53,6 +53,8 @@ if [[ -n "$PS1" ]]; then
     set -o pipefail
     trap 'echo -e "\e[41mexit ${PIPESTATUS[*]}\e[0m"' ERR
 
+    stty start ^- stop ^-
+
     # let "C-p/n" attempt completion from history
     bind '"\C-p":history-search-backward'
     bind '"\C-n":history-search-forward'
