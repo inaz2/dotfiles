@@ -55,6 +55,9 @@
   (dired "."))
 (global-set-key (kbd "\C-x\C-d") 'dired-here)
 
+;; let "M-." open other window
+(global-set-key (kbd "M-.") 'find-tag-other-window)
+
 ;; filter-region
 (defun filter-region ()
   (interactive)
