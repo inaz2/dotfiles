@@ -6,6 +6,14 @@ set history save on
 set print array on
 set print array-indexes on
 
+define vmmap
+  eval "shell cat /proc/%d/maps", getpid()
+end
+
+define args
+  i r rdi rsi rdx rcx r8 r9
+end
+
 define dps
   init-if-undefined $_=$sp
   if $argc == 0
