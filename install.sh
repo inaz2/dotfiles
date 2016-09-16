@@ -10,7 +10,7 @@ for i in *; do
     $script_name|README)
         ;;
     *)
-        ln -i -s "$PWD/$i" "$HOME/.$i"
+        ln -i -b -s "$PWD/$i" "$HOME/.$i"
         ;;
     esac
 done
