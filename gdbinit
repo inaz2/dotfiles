@@ -44,4 +44,16 @@ define nc
   display
 end
 
+define xw
+  x/40wx $arg0
+end
+
+define xg
+  x/40gx $arg0
+end
+
+define xi
+  x/40i $pc-0x20
+end
+
 display/i $pc
