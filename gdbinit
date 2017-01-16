@@ -39,4 +39,4 @@ end
 
 display/i $pc
 
-source .gdbscript.py
+source ~/.gdbscript.py
