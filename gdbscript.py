@@ -107,13 +107,43 @@ class MallocBreakpoint(gdb.Breakpoint):
             size = evaluate('{void *}($esp+4)')
         else:
             size = evaluate('$rdi')
-        fb = MallocFinishBreakpoint(size)
+        MallocFinishBreakpoint('malloc(0x{:x})'.format(size))
+        return False
+
+class CallocBreakpoint(gdb.Breakpoint):
+    def __init__(self):
+        super().__init__('calloc', gdb.BP_BREAKPOINT, internal=True)
+
+    def stop(self):
+        wordsize = get_wordsize()
+        if wordsize == 4:
+            nmemb = evaluate('{void *}($esp+4)')
+            size = evaluate('{void *}($esp+8)')
+        else:
+            nmemb = evaluate('$rdi')
+            size = evaluate('$rsi')
+        MallocFinishBreakpoint('calloc({}, 0x{:x})'.format(nmemb, size))
+        return False
+
+class ReallocBreakpoint(gdb.Breakpoint):
+    def __init__(self):
+        super().__init__('realloc', gdb.BP_BREAKPOINT, internal=True)
+
+    def stop(self):
+        wordsize = get_wordsize()
+        if wordsize == 4:
+            ptr = evaluate('{void *}($esp+4)')
+            size = evaluate('{void *}($esp+8)')
+        else:
+            ptr = evaluate('$rdi')
+            size = evaluate('$rsi')
+        MallocFinishBreakpoint('realloc(0x{:x}, 0x{:x})'.format(ptr, size))
         return False
 
 class MallocFinishBreakpoint(gdb.FinishBreakpoint):
-    def __init__(self, size):
+    def __init__(self, funcstr):
         super().__init__(internal=True)
-        self.size = size
+        self.funcstr = funcstr
 
     def stop(self):
         wordsize = get_wordsize()
@@ -121,7 +151,7 @@ class MallocFinishBreakpoint(gdb.FinishBreakpoint):
             addr = evaluate('$eax')
         else:
             addr = evaluate('$rax')
-        print('[+] malloc(0x{:x}) = 0x{:x}'.format(self.size, addr))
+        print('\x1b[30;1m[+] {} = 0x{:x}\x1b[0m'.format(self.funcstr, addr))
         return False
 
 class FreeBreakpoint(gdb.Breakpoint):
@@ -131,31 +161,15 @@ class FreeBreakpoint(gdb.Breakpoint):
     def stop(self):
         wordsize = get_wordsize()
         if wordsize == 4:
-            addr = evaluate('{void *}($esp+4)')
+            ptr = evaluate('{void *}($esp+4)')
         else:
-            addr = evaluate('$rdi')
-        print('[+] free(0x{:x})'.format(addr))
-        return False
-
-class ReadBreakpoint(gdb.Breakpoint):
-    def __init__(self):
-        super().__init__('read', gdb.BP_BREAKPOINT, internal=True)
-
-    def stop(self):
-        wordsize = get_wordsize()
-        if wordsize == 4:
-            fd = evaluate('{void *}($esp+4)')
-            addr = evaluate('{void *}($esp+8)')
-            count = evaluate('{void *}($esp+12)')
-        else:
-            fd = evaluate('$rdi')
-            addr = evaluate('$rsi')
-            count = evaluate('$rdx')
-        print('[+] read({}, 0x{:x}, 0x{:x})'.format(fd, addr, count))
+            ptr = evaluate('$rdi')
+        print('\x1b[30;1m[+] free(0x{:x})\x1b[0m'.format(ptr))
         return False
 
 DpsCommand()
 HeapCommand()
 MallocBreakpoint()
+CallocBreakpoint()
+ReallocBreakpoint()
 FreeBreakpoint()
-ReadBreakpoint()
