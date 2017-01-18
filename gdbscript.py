@@ -97,5 +97,65 @@ class HeapCommand(gdb.Command):
             print('{:<12x}  {:<6x}  {:<6x}  {:<6x}  {:<16x}  {:<16x}'.format(addr_chunk, prevsize, size, flag, fd, bk))
             addr_chunk += size
 
+class MallocBreakpoint(gdb.Breakpoint):
+    def __init__(self):
+        super().__init__('malloc', gdb.BP_BREAKPOINT, internal=True)
+
+    def stop(self):
+        wordsize = get_wordsize()
+        if wordsize == 4:
+            size = evaluate('{void *}($esp+4)')
+        else:
+            size = evaluate('$rdi')
+        fb = MallocFinishBreakpoint(size)
+        return False
+
+class MallocFinishBreakpoint(gdb.FinishBreakpoint):
+    def __init__(self, size):
+        super().__init__(internal=True)
+        self.size = size
+
+    def stop(self):
+        wordsize = get_wordsize()
+        if wordsize == 4:
+            addr = evaluate('$eax')
+        else:
+            addr = evaluate('$rax')
+        print('[+] malloc(0x{:x}) = 0x{:x}'.format(self.size, addr))
+        return False
+
+class FreeBreakpoint(gdb.Breakpoint):
+    def __init__(self):
+        super().__init__('free', gdb.BP_BREAKPOINT, internal=True)
+
+    def stop(self):
+        wordsize = get_wordsize()
+        if wordsize == 4:
+            addr = evaluate('{void *}($esp+4)')
+        else:
+            addr = evaluate('$rdi')
+        print('[+] free(0x{:x})'.format(addr))
+        return False
+
+class ReadBreakpoint(gdb.Breakpoint):
+    def __init__(self):
+        super().__init__('read', gdb.BP_BREAKPOINT, internal=True)
+
+    def stop(self):
+        wordsize = get_wordsize()
+        if wordsize == 4:
+            fd = evaluate('{void *}($esp+4)')
+            addr = evaluate('{void *}($esp+8)')
+            count = evaluate('{void *}($esp+12)')
+        else:
+            fd = evaluate('$rdi')
+            addr = evaluate('$rsi')
+            count = evaluate('$rdx')
+        print('[+] read({}, 0x{:x}, 0x{:x})'.format(fd, addr, count))
+        return False
+
 DpsCommand()
 HeapCommand()
+MallocBreakpoint()
+FreeBreakpoint()
+ReadBreakpoint()
