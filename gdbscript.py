@@ -97,6 +97,19 @@ class HeapCommand(gdb.Command):
             print('{:<12x}  {:<6x}  {:<6x}  {:<6x}  {:<16x}  {:<16x}'.format(addr_chunk, prevsize, size, flag, fd, bk))
             addr_chunk += size
 
+class SectionFunction(gdb.Function):
+    def __init__(self):
+        super().__init__('section')
+
+    def invoke(self, section_name):
+        section_name = section_name.string()
+        result = gdb.execute('info files', to_string=True)
+        for line in result.splitlines():
+            if ' - ' not in line or ' in ' in line:
+                continue
+            if section_name in line:
+                return int(line.split()[0], 16)
+
 class MallocBreakpoint(gdb.Breakpoint):
     def __init__(self):
         super().__init__('malloc', gdb.BP_BREAKPOINT, internal=True)
@@ -169,6 +182,7 @@ class FreeBreakpoint(gdb.Breakpoint):
 
 DpsCommand()
 HeapCommand()
+SectionFunction()
 MallocBreakpoint()
 CallocBreakpoint()
 ReallocBreakpoint()
