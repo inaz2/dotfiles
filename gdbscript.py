@@ -40,7 +40,7 @@ class DpsCommand(gdb.Command):
             ptr = start + i*wordsize
             addr = poi(ptr)
             value = gdb.execute('x/s 0x{:x}'.format(addr), to_string=True)
-            loc, cstr = value.split(':', 1)
+            loc, cstr = value.split(':\t', 1)
             cstr = cstr.strip()
             if not ' ' in loc and not re.search(r'^<|\\\d{3}', cstr):
                 value = loc + ' ' + cstr
