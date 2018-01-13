@@ -10,7 +10,7 @@ for i in *; do
     $script_name|README)
         ;;
     *)
-        ln -i -b -s "$PWD/$i" "$HOME/.$i"
+        ln -i --backup --suffix .bak -s "$PWD/$i" "$HOME/.$i"
         ;;
     esac
 done
