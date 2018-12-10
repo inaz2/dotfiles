@@ -37,11 +37,12 @@ if [[ -n "$PS1" ]]; then
     __git_status() {
         local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
         if [[ -n "$branch" ]]; then
+            local commit_id="$(git rev-parse --short HEAD 2>/dev/null)"
             local status="$(git status --short --untracked-files=no 2>/dev/null)"
             if [[ -n "$status" ]]; then
-                echo "** $branch"
+                echo "** $branch $commit_id"
             else
-                echo "-- $branch"
+                echo "-- $branch $commit_id"
             fi
         fi
     }
