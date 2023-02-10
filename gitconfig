@@ -13,6 +13,7 @@
         lc = log ORIG_HEAD.. --stat --no-merges
         lol = log --graph --format='%C(yellow)%h%C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset'
         lola = log --graph --format='%C(yellow)%h%C(cyan)%d %Creset%s %C(green)(%cr) %C(magenta)<%an>%Creset' --all
+        gone = ! "git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == \"[gone]\" {print $1}' | xargs -r git branch -D"
 
 [color]
         ui = auto
