@@ -2,7 +2,7 @@ umask 022
 shopt -u sourcepath
 
 if [[ -n "$PS1" ]]; then
-    export LANG=en_US.UTF-8
+    export LANG=C.UTF-8
     export EDITOR=vi
     export LESS='--RAW-CONTROL-CHARS --LONG-PROMPT'
     unset MAIL
