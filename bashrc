@@ -144,12 +144,16 @@ if [[ -n "$PS1" ]]; then
         read -r -d '' CODE <<"__EOF__"
 import sys, chardet
 
-text = sys.stdin.read()
-outenc = sys.stdout.encoding or 'UTF-8'
-result = chardet.detect(text)
-sys.stdout.write(text.decode(result['encoding'], 'replace').encode(outenc))
+buf = sys.stdin.buffer.read()
+result = chardet.detect(buf)
+if result['encoding'] is not None:
+    outenc = sys.stdout.encoding or 'UTF-8'
+    sys.stdout.buffer.write(buf.decode(result['encoding'], 'replace').encode(outenc))
+else:
+    sys.stdout.buffer.write(buf)
+    sys.exit(1)
 __EOF__
-        cat "$@" | python -c "$CODE"
+        cat "$@" | python3 -c "$CODE"
     }
 
     diffu() {
