@@ -34,7 +34,7 @@ if [[ -n "$PS1" ]]; then
              ;;
     esac
 
-    __git_status() {
+    function __git_status() {
         local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
         if [[ -n "$branch" ]]; then
             local commit_id="$(git rev-parse --short HEAD 2>/dev/null)"
@@ -67,7 +67,7 @@ if [[ -n "$PS1" ]]; then
     bind -x '"\eh":"__look_at man"'
     bind -x '"\e?":"__look_at help"'
 
-    __look_at() {
+    function __look_at() {
         local line="${READLINE_LINE##sudo }"
         local cmd="${line%% *}"
         if hash "$cmd" &>/dev/null; then
@@ -89,15 +89,15 @@ if [[ -n "$PS1" ]]; then
     alias ec='TERM=xterm-256color emacsclient -nw --alternate-editor=""'
     alias wget='wget --no-check-certificate'
 
-    grep() {
+    function grep() {
         LC_ALL=C command grep --color=auto "$@"
     }
 
-    sort() {
+    function sort() {
         LC_ALL=C command sort "$@"
     }
 
-    cd() {
+    function cd() {
         command cd "$@"
         local s=$?
         if [[ ($s -eq 0) && (${#FUNCNAME[*]} -eq 1) ]]; then
@@ -106,7 +106,7 @@ if [[ -n "$PS1" ]]; then
         return $s
     }
 
-    l() {
+    function l() {
         # if the argument is a single file or stdin is pipe
         if [[ ($# -eq 1 && -f "$1") || (-p /dev/stdin) ]]; then
             ${PAGER:-less} "$@"
@@ -115,7 +115,7 @@ if [[ -n "$PS1" ]]; then
         fi
     }
 
-    p() {
+    function p() {
         if [[ $# -gt 0 ]]; then
             ps auxww | grep "$@"
         else
@@ -123,7 +123,7 @@ if [[ -n "$PS1" ]]; then
         fi
     }
 
-    h() {
+    function h() {
         if [[ $# -gt 0 ]]; then
             history | tac | sort -k2 -u | sort | grep "$@"
         else
@@ -131,15 +131,15 @@ if [[ -n "$PS1" ]]; then
         fi
     }
 
-    f() {
+    function f() {
         find "${2:-$PWD}" \! -type d \! -path "*/.*" -path "*$1*" |& grep -v -F ": Permission denied" | sort
     }
 
-    s() {
+    function s() {
         screen -U -t "$1" "$@"
     }
 
-    cats() {
+    function cats() {
         local CODE
         read -r -d '' CODE <<"__EOF__"
 import sys, chardet
@@ -156,7 +156,7 @@ __EOF__
         cat "$@" | python3 -c "$CODE"
     }
 
-    diffu() {
+    function diffu() {
         local DIFF
         if hash git &>/dev/null; then
             DIFF="git diff --no-index"
@@ -170,29 +170,29 @@ __EOF__
         fi
     }
 
-    cutf() {
+    function cutf() {
         sed -E 's/\s+/ /g' | cut -d ' ' -f "$@"
     }
 
-    grepb() {
+    function grepb() {
         local bytes=$(echo "$1" | perl -ne 's/([0-9A-F]{2})/print pack("H2",$1)/eig')
         shift
         grep -boa "$bytes" "$@" | awk -F: '{printf "0x%x\n", $1}'
     }
 
-    xlines() {
+    function xlines() {
         while read; do echo -n "$REPLY" | "$@"; done
     }
 
-    dropcolor() {
+    function dropcolor() {
         sed -E 's/\x1b\[[0-9;]+m//g' "$@"
     }
 
-    diffdump() {
+    function diffdump() {
         diff -u1 -F '>:$' -I '[0-9a-f]\{6,\}' <(objdump -d "$1" | cut -f2-) <(objdump -d "$2" | cut -f2-)
     }
 
-    __sudo_cygwin() {
+    function __sudo_cygwin() {
         /usr/bin/cygstart --action=runas /bin/bash -l -c "${@:-cmd}"
     }
 
